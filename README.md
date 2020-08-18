@@ -1,7 +1,7 @@
 ## A template repository for creating a REMARK.
 
 
-A REMARK (R[eplications/eproductions] and Explorations Made using ARK) is a self-contained and complete projects written using the Econ-ARK. REMARKs should be `nbreproduce` compatible and reproducible across platforms.
+A REMARK `(R[eplications/eproductions] and Explorations Made using ARK)` is a self-contained and complete projects written using the Econ-ARK. REMARKs should be `nbreproduce` compatible and reproducible across platforms.
 
 The base structure of REMARK should look like
 ```
