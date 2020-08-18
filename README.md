@@ -1,9 +1,9 @@
-### A template repository for creating a REMARK.
+## A template repository for creating a REMARK.
 
 
 A REMARK (R[eplications/eproductions] and Explorations Made using ARK) is a self-contained and complete projects written using the Econ-ARK. REMARKs should be `nbreproduce` compatible and reproducible across platforms.
 
-The base structure of REMARK could look like something
+The base structure of REMARK should look like
 ```
 - reproduce.sh / a bash script (required)
 - versioned locked requirements.txt (required)
@@ -34,4 +34,15 @@ It's possible to have multiple bash scripts too. A script like `reproduce_min.sh
 The project should be reproducible using the following command in this directory
 ```
 $ nbreproduce reproduce.sh/reproduce_min.sh/any_other_bash_script.sh
+```
+
+
+### How to install nbreproduce?
+
+To get detailed documentation about `nbreproduce` you can go through https://econ-ark.github.io/nbreproduce/.
+
+`nbreproduce` is available through PyPI and depends on [Docker](https://www.docker.com/products/docker-desktop).
+If you already have Docker installed locally you can install `nbreproduce` using
+```
+$ pip install nbreproduce
 ```
