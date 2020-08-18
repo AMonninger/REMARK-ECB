@@ -5,6 +5,11 @@ A REMARK (R[eplications/eproductions] and Explorations Made using ARK) is a self
 
 The base structure of REMARK could look like something
 ```
+- reproduce.sh / a bash script (required)
+- versioned locked requirements.txt (required)
+- README.md (required)
+- REMARKname.cff (optional CFF format file for the REMARK)
+- OriginalPaper.bib (optional bib reference file to the original Paper)
 - code/ (if required)
   - file1.py
   - notebook1.ipynb
@@ -21,9 +26,6 @@ The base structure of REMARK could look like something
 - slides/ (if required)
   - slides.tex
   - ....
-- reproduce.sh / a bash script (required)
-- versioned locked requirements.txt (required)
-- README.md (required)
 ```
 These bash scripts can contain any number of sequential steps, like running a python script, building latex files. Look at the bash script is this repository for an example.
 
