@@ -3,11 +3,16 @@
 
 A REMARK `(R[eplications/eproductions] and Explorations Made using ARK)` is a self-contained and complete projects written using the Econ-ARK. REMARKs should be `nbreproduce` compatible and reproducible across platforms.
 
+Binder link for notebook -> [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?filepath=resources%2Fcode%2Ftemplate-example-notebook.ipynb)
+
+
+Binder link for the dashboard -> [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?urlpath=voila%2Frender%2Fresources%2Fdashboard%2Fdashboard.ipynb)
+
 The base structure of a REMARK should look like
 ```
 - reproduce.sh / a bash script (required)
 - versioned locked requirements.txt (required)
-- README.md (required)
+- README.md (required, with Binder links to execute the notebooks and dashboards if they are present in the REMARK)
 - resources
     - resources/code (if required)
       - file1.py
@@ -74,5 +79,11 @@ pandas==1.1.1
 voila==0.1.22
 ```
 
+### How to create mybinder links/buttons?
 
+- Go to https://mybinder.org
+- Fill up the URL field with the link to the repository (example: https://github.com/econ-ark/REMARK-template)
+- In path to notebook, fill up the path to notebook (in this example: `resources/code/template-example-notebook.ipynb`)
+- Click on the launch button to start the build
+- Click on the "Copy the text below, then paste into your README to show a binder badge" to get the markdown and rST text required to create the mybinder button.
 
