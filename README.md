@@ -57,12 +57,13 @@ $ pip install nbreproduce # make sure you have Docker installed on your machine.
 
 A requirements file tells the exact dependencies required to run the code. This currently only supports packages available on PyPI.
 
-For example if you use econ-ark, numpy, pandas, seaborn in your REMARK notebooks and code a requirements file would look
+For example if you use econ-ark, numpy, pandas, seaborn and voila in your REMARK notebooks and code a requirements file would look
 ```
 econ-ark
 numpy
 pandas
 seaborn
+voila
 ```
 But this file misses out an important detail which is absolutely necessary to make sure it is reproducible across systems and in the future, python package versions. A versioned requirements file would look like:
 ```
@@ -70,6 +71,7 @@ econ-ark==0.10.7
 numpy==1.19.1
 seaborn==0.10.1
 pandas==1.1.1
+voila==0.1.22
 ```
 
 
