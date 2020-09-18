@@ -12,7 +12,7 @@ This is a starter repository to start building your REMARKs, an example of the f
 The base structure of a REMARK should look like
 ```
 - reproduce.sh / a bash script (required)
-- versioned locked requirements.txt (required)
+- versioned locked requirements.txt (required, if code is in Python), a Dockerfile if the code isn't in Python to create the reproducible environment.
 - README.md (required, with Binder links to execute the notebooks and dashboards if they are present in the REMARK)
 - code (if required)
   - file1.py
