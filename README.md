@@ -2,7 +2,7 @@
 
 A REMARK `(R[eplications/eproductions] and Explorations Made using ARK)` is a self-contained and complete projects written using the Econ-ARK. REMARKs should be `nbreproduce` compatible and reproducible across platforms.
 
-This is a starter repository to start building your REMARKs, an example of the final product of a REMARK is available at https://github.com/econ-ark/BufferStockTheory, a REMARK which reproduces the [Theoretical Foundations of Buffer Stock Saving]() paper.
+This is a starter repository to start building your REMARKs, an example of the final product of a REMARK is available at https://github.com/econ-ark/BufferStockTheory, a REMARK which reproduces the [Theoretical Foundations of Buffer Stock Saving]() paper. This example is one of many possible ways you might structure a REMARK, the minimal requirements are described below.
 
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?filepath=resources%2Fcode%2Ftemplate-example-notebook.ipynb) Binder link for the main notebook in this repository.
@@ -36,7 +36,7 @@ The base structure of a REMARK should look like
   - dashboard.ipynb
 - .....
 ```
-As you can see the resources directory of the REMARK is largely optional and can be molded as required. The only strict requirements are the bash scripts and the versioned requirements.txt file.
+As you can see the structure of the REMARK is largely optional and can be molded as required. The only strict requirements are the bash scripts and the versioned requirements.txt file or a Dockerfile in case of non-Python code.
 
 These bash scripts can contain any number of sequential steps, like running a python script, building latex files. Look at the bash script is this repository for an example.
 
