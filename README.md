@@ -1,41 +1,40 @@
-## A template repository for creating a REMARK.
-
+## A starter repository for creating a REMARK.
 
 A REMARK `(R[eplications/eproductions] and Explorations Made using ARK)` is a self-contained and complete projects written using the Econ-ARK. REMARKs should be `nbreproduce` compatible and reproducible across platforms.
 
-Binder link for notebook -> [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?filepath=resources%2Fcode%2Ftemplate-example-notebook.ipynb)
+This is a starter repository to start building your REMARKs, an example of the final product of a REMARK is available at https://github.com/econ-ark/BufferStockTheory, a REMARK which reproduces the [Theoretical Foundations of Buffer Stock Saving]() paper.
 
 
-Binder link for the dashboard -> [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?urlpath=voila%2Frender%2Fresources%2Fdashboard%2Fdashboard.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?filepath=resources%2Fcode%2Ftemplate-example-notebook.ipynb) Binder link for the main notebook in this repository.
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/econ-ark/REMARK-template/master?urlpath=voila%2Frender%2Fresources%2Fdashboard%2Fdashboard.ipynb) Binder link for a voila dashboard in this repository.
 
 The base structure of a REMARK should look like
 ```
 - reproduce.sh / a bash script (required)
 - versioned locked requirements.txt (required)
 - README.md (required, with Binder links to execute the notebooks and dashboards if they are present in the REMARK)
-- resources
-    - resources/code (if required)
-      - file1.py
-      - notebook1.ipynb
-      - ...
-    - resources/latex (if required)
-      - paper.tex
-      - paper.bib
-      - paper.pdf
-    - resources/figures (if required)
-      - fig1.png
-      - fig2.png
-      - ....
-    - resources/equations (if required)
-    - resources/slides (if required)
-      - slides.tex
-      - ....
-    - resources/[REMARKname].cff (optional CFF format file for the REMARK)
-    - resources/[REMARKname-OriginalPaper].bib (optional bib reference file to the original Paper)
-    - resources/dashboard (if required)
-      - dashboard.ipynb
-    - resources/....
-      - .....
+- code (if required)
+  - file1.py
+  - notebook1.ipynb
+  - ...
+- latex (if required)
+  - paper.tex
+  - paper.bib
+  - paper.pdf
+- figures (if required)
+  - fig1.png
+  - fig2.png
+  - ....
+- equations (if required)
+- slides (if required)
+  - slides.tex
+  - ....
+- [REMARKname].cff (optional CFF format file for the REMARK)
+- [REMARKname-OriginalPaper].bib (optional bib reference file to the original Paper)
+- dashboard (if required)
+  - dashboard.ipynb
+- .....
 ```
 As you can see the resources directory of the REMARK is largely optional and can be molded as required. The only strict requirements are the bash scripts and the versioned requirements.txt file.
 
