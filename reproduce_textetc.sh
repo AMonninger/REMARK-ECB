@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pdflatex --output-directory=latex PortfolioChoiceWithRiskyHousing.tex
-bibtex latex/PortfolioChoiceWithRiskyHousing
-pdflatex --output-directory=latex PortfolioChoiceWithRiskyHousing.tex
-pdflatex --output-directory=latex PortfolioChoiceWithRiskyHousing.tex
+pdflatex --output-directory=latex REMARK-starter-example.tex
+bibtex latex/REMARK-starter-example
+pdflatex --output-directory=latex REMARK-starter-example.tex
+pdflatex --output-directory=latex REMARK-starter-example.tex
