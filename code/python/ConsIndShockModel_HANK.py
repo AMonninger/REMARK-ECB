@@ -2368,8 +2368,6 @@ class IndShockConsumerType(PerfForesightConsumerType):
         self.MPCmax = MPCmax
         
         
-        
-        
     def define_distribution_grid(self, dist_mGrid=None, dist_pGrid=None, m_density = 0, num_pointsM = None, timestonest = None,  num_pointsP = 55, max_p_fac = 30.0):
         
         '''
@@ -2410,12 +2408,12 @@ class IndShockConsumerType(PerfForesightConsumerType):
             self.neutral_measure = False
             
         if num_pointsM == None:
-            m_points = self.aXtraCount
+            m_points = self.mCount
         else:
             m_points = num_pointsM
             
         if not isinstance(timestonest,int):
-            timestonest = self.aXtraNestFac
+            timestonest = self.mFac
         else:
             timestonest = timestonest
           
@@ -2424,7 +2422,7 @@ class IndShockConsumerType(PerfForesightConsumerType):
             if not hasattr(dist_mGrid,'__len__'):
                 
                 aXtra_Grid = make_grid_exp_mult(
-                        ming=self.aXtraMin, maxg=self.aXtraMax, ng = m_points, timestonest = timestonest) #Generate Market resources grid given density and number of points
+                        ming=self.mMin, maxg=self.mMax, ng = m_points, timestonest = timestonest) #Generate Market resources grid given density and number of points
                 
                 for i in range(m_density):
                     axtra_shifted = np.delete(aXtra_Grid,-1) 
@@ -2440,6 +2438,8 @@ class IndShockConsumerType(PerfForesightConsumerType):
                         if a not in aXtra_Grid:
                             j = aXtra_Grid.searchsorted(a)
                             aXtra_Grid = np.insert(aXtra_Grid, j, a)
+                            
+                            
                 '''         
                 if self.BoroCnstArt < 0:
                     
@@ -2479,14 +2479,14 @@ class IndShockConsumerType(PerfForesightConsumerType):
         
         elif self.T_cycle != 0:
             if num_pointsM == None:
-                m_points = self.aXtraCount
+                m_points = self.mCount
             else:
                 m_points = num_pointsM
             
             
             if not hasattr(dist_mGrid,'__len__'):
                 aXtra_Grid = make_grid_exp_mult(
-                        ming=self.aXtraMin, maxg=self.aXtraMax, ng = m_points, timestonest = timestonest) #Generate Market resources grid given density and number of points
+                        ming=self.mMin, maxg=self.mMax, ng = m_points, timestonest = timestonest) #Generate Market resources grid given density and number of points
                 
                 for i in range(m_density):
                     axtra_shifted = np.delete(aXtra_Grid,-1) 
@@ -2542,6 +2542,160 @@ class IndShockConsumerType(PerfForesightConsumerType):
                 
                 self.dist_pGrid = self.T_cycle*[np.array([1])]
             
+                
+    '''   
+        
+    def define_distribution_grid(self, dist_mGrid=None, dist_pGrid=None, m_density = 0, num_pointsM = None, timestonest = None,  num_pointsP = 55, max_p_fac = 30.0):
+        
+        
+        Defines the grid on which the distribution is defined. Stores the grid of market resources and permanent income as attributes of self.
+        Grid for normalized market resources and permanent income may be prespecified 
+        as dist_mGrid and dist_pGrid, respectively. If not then default grid is computed based off given parameters.
+        
+        Parameters
+        ----------
+        dist_mGrid : np.array
+                Prespecified grid for distribution over normalized market resources
+            
+        dist_pGrid : np.array
+                Prespecified grid for distribution over permanent income. 
+            
+        m_density: float
+                Density of normalized market resources grid. Default value is mdensity = 0.
+                Only affects grid of market resources if dist_mGrid=None.
+            
+        num_pointsM: float
+                Number of gridpoints for market resources grid.
+        
+        num_pointsP: float
+                 Number of gridpoints for permanent income. 
+                 This grid will be exponentiated by the function make_grid_exp_mult.
+                
+        max_p_fac : float
+                Factor that scales the maximum value of permanent income grid. 
+                Larger values increases the maximum value of permanent income grid.
+        
+        Returns
+        -------
+        None
+        
+ 
+   
+        if not hasattr(self, "neutral_measure"): # If true Use Harmenberg 2021's Neutral Measure. For more information, see https://econ-ark.org/materials/harmenberg-aggregation?launch
+            self.neutral_measure = False
+            
+        if num_pointsM == None:
+            m_points = self.aXtraCount
+        else:
+            m_points = num_pointsM
+            
+        if not isinstance(timestonest,int):
+            timestonest = self.aXtraNestFac
+        else:
+            timestonest = timestonest
+          
+        if self.cycles == 0:
+            
+            if not hasattr(dist_mGrid,'__len__'):
+                
+                aXtra_Grid = make_grid_exp_mult(
+                        ming=self.aXtraMin, maxg=self.aXtraMax, ng = m_points, timestonest = timestonest) #Generate Market resources grid given density and number of points
+                
+                for i in range(m_density):
+                    axtra_shifted = np.delete(aXtra_Grid,-1) 
+                    axtra_shifted = np.insert(axtra_shifted, 0,1.00000000e-04)
+                    dist_betw_pts = aXtra_Grid - axtra_shifted
+                    dist_betw_pts_half = dist_betw_pts/2
+                    new_A_grid = axtra_shifted + dist_betw_pts_half
+                    aXtra_Grid = np.concatenate((aXtra_Grid,new_A_grid))
+                    aXtra_Grid = np.sort(aXtra_Grid)
+                      
+                for a in self.aXtraExtra:
+                    if a is not None:
+                        if a not in aXtra_Grid:
+                            j = aXtra_Grid.searchsorted(a)
+                            aXtra_Grid = np.insert(aXtra_Grid, j, a)
+
+                      
+
+                self.dist_mGrid = aXtra_Grid
+            
+            else:
+                self.dist_mGrid = dist_mGrid #If grid of market resources prespecified then use as mgrid
+                
+            if not hasattr(dist_pGrid,'__len__'):
+                num_points = num_pointsP #Number of permanent income gridpoints
+                #Dist_pGrid is taken to cover most of the ergodic distribution
+                p_variance = self.PermShkStd[0]**2 #set variance of permanent income shocks
+                max_p = max_p_fac*(p_variance/(1-self.LivPrb[0]))**0.5 #Maximum Permanent income value
+                one_sided_grid = make_grid_exp_mult(1.05+1e-3, np.exp(max_p), num_points, 3)
+                self.dist_pGrid = np.append(np.append(1.0/np.fliplr([one_sided_grid])[0],np.ones(1)),one_sided_grid) #Compute permanent income grid
+            else:
+
+                self.dist_pGrid = dist_pGrid #If grid of permanent income prespecified then use it as pgrid
+                            
+            if self.neutral_measure == True: # If true Use Harmenberg 2021's Neutral Measure. For more information, see https://econ-ark.org/materials/harmenberg-aggregation?launch
+                
+                self.dist_pGrid = np.array([1])
+                
+        elif self.cycles > 1:
+            raise Exception('define_distribution_grid requires cycles = 0 or cycles = 1')
+        
+        elif self.T_cycle != 0:
+            if num_pointsM == None:
+                m_points = self.aXtraCount
+            else:
+                m_points = num_pointsM
+            
+            
+            if not hasattr(dist_mGrid,'__len__'):
+                aXtra_Grid = make_grid_exp_mult(
+                        ming=self.aXtraMin, maxg=self.aXtraMax, ng = m_points, timestonest = timestonest) #Generate Market resources grid given density and number of points
+                
+                for i in range(m_density):
+                    axtra_shifted = np.delete(aXtra_Grid,-1) 
+                    axtra_shifted = np.insert(axtra_shifted, 0,1.00000000e-04)
+                    dist_betw_pts = aXtra_Grid - axtra_shifted
+                    dist_betw_pts_half = dist_betw_pts/2
+                    new_A_grid = axtra_shifted + dist_betw_pts_half
+                    aXtra_Grid = np.concatenate((aXtra_Grid,new_A_grid))
+                    aXtra_Grid = np.sort(aXtra_Grid)
+                    
+                for a in self.aXtraExtra:
+                    if a is not None:
+                        if a not in aXtra_Grid:
+                            j = aXtra_Grid.searchsorted(a)
+                            aXtra_Grid = np.insert(aXtra_Grid, j, a)
+
+
+                self.dist_mGrid =  aXtra_Grid
+            
+            else:
+                self.dist_mGrid = dist_mGrid #If grid of market resources prespecified then use as mgrid
+                    
+            if not hasattr(dist_pGrid,'__len__'):
+                
+                self.dist_pGrid = [] #list of grids of permanent income    
+                
+                for i in range(self.T_cycle):
+                    
+                    num_points = num_pointsP
+                    #Dist_pGrid is taken to cover most of the ergodic distribution
+                    p_variance = self.PermShkStd[i]**2 # set variance of permanent income shocks this period
+                    max_p = max_p_fac*(p_variance/(1-self.LivPrb[i]))**0.5 # Consider probability of staying alive this period
+                    one_sided_grid = make_grid_exp_mult(1.05+1e-3, np.exp(max_p), num_points, 2) 
+                    
+                    dist_pGrid = np.append(np.append(1.0/np.fliplr([one_sided_grid])[0],np.ones(1)),one_sided_grid) # Compute permanent income grid this period. Grid of permanent income may differ dependent on PermShkStd
+                    self.dist_pGrid.append(dist_pGrid)
+
+            else:
+                self.dist_pGrid = dist_pGrid #If grid of permanent income prespecified then use as pgrid
+                           
+            if self.neutral_measure == True: # If true Use Harmenberg 2021's Neutral Measure. For more information, see https://econ-ark.org/materials/harmenberg-aggregation?launch
+                
+                self.dist_pGrid = self.T_cycle*[np.array([1])]
+            
+    '''
                 
                 
     def calc_transition_matrix(self, shk_dstn = None):
