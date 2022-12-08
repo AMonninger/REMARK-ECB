@@ -2929,7 +2929,8 @@ class IndShockConsumerType(PerfForesightConsumerType):
         dx = .0001 # Size of perturbation
         i = params['T_cycle'] - 1 # Period in which the change in the interest rate occurs (second to last period)
         
-        FinHorizonAgent.IncShkDstn = params['T_cycle']*[ self.IncShkDstn[0] ]
+        #FinHorizonAgent.IncShkDstn = params['T_cycle']*[ self.IncShkDstn[0] ]
+        FinHorizonAgent.IncShkDstn = params['T_cycle']*[ FinHorizonAgent.IncShkDstn[0] ]
         
         # If parameter is in time invariant list then add it to time vary list
         FinHorizonAgent.del_from_time_inv(shk_param) 
