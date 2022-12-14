@@ -2926,7 +2926,7 @@ class IndShockConsumerType(PerfForesightConsumerType):
         FinHorizonAgent.solution_terminal = deepcopy(self.solution[0]) # Set Terminal Solution as Steady State Consumption Function
         FinHorizonAgent.cFunc_terminal_ = deepcopy(self.solution[0].cFunc) # Set Terminal Solution as Steady State Consumption Function
         
-        dx = .0001 # Size of perturbation
+        dx = -.0001 # Size of perturbation
         i = params['T_cycle'] - 2 # Period in which the change in the interest rate occurs (second to last period)
         
         FinHorizonAgent.IncShkDstn = params['T_cycle']*[ self.IncShkDstn[0] ]
