@@ -12,7 +12,8 @@ It currently solves three types of models:
 See NARK https://HARK.githhub.io/Documentation/NARK for information on variable naming conventions.
 See HARK documentation for mathematical descriptions of the models being solved.
 """
-
+import matplotlib.pyplot as plt
+ 
 
 from copy import copy, deepcopy
 
@@ -4249,3 +4250,69 @@ init_cyclical["PermShkStd"] = [0.1, 0.1, 0.1, 0.1]
 init_cyclical["TranShkStd"] = [0.1, 0.1, 0.1, 0.1]
 init_cyclical["LivPrb"] = 4 * [0.98]
 init_cyclical["T_cycle"] = 4
+
+
+# Defining a dictionary with parameter values. 
+# Note: if you do not specify your own one, we'll provide you with some standard parameters.
+HANK_Dict = {
+    # Parameters shared with the perfect foresight model
+    "CRRA":2,                              # Coefficient of relative risk aversion
+    "Rfree": 1.03,                    # Interest factor on assets
+    "DiscFac": 0.96,                      # Intertemporal discount factor
+    "LivPrb" : [.99375],                   # Survival probability
+    "PermGroFac" : [1.00],                 # Permanent income growth factor
+
+    # Parameters that specify the income distribution over the lifecycle
+    "PermShkStd" : [.06],                  # Standard deviation of log permanent shocks to income
+    "PermShkCount" : 7,                    # Number of points in discrete approximation to permanent income shocks
+    "TranShkStd" : [0.3],                  # Standard deviation of log transitory shocks to income
+    "TranShkCount" : 7,    
+    
+    # HANK params
+    "taxrate" : [0], # set to 0.0 because we are going to assume that labor here is actually after tax income
+    "labor": [0.7925],
+    "wage": [1.0],    
+    
+    # Number of points in discrete approximation to transitory income shocks
+    "UnempPrb" : 0.0,                      # Probability of unemployment while working
+    "IncUnemp" :  0.0,                     # Unemployment benefits replacement rate
+    "UnempPrbRet" : 0.0000,                # Probability of "unemployment" while retired
+    "IncUnempRet" : 0.0,                   # "Unemployment" benefits when retired
+    "T_retire" : 0.0,                      # Period of retirement (0 --> no retirement)
+    "tax_rate" : 0.0,                      # Flat income tax rate (legacy parameter, will be removed in future)
+
+    # Parameters for constructing the "assets above minimum" grid
+    "aXtraMin" : 0.0001,                    # Minimum end-of-period "assets above minimum" value
+    "aXtraMax" : 1000, #1500,                       # Maximum end-of-period "assets above minimum" value
+    "aXtraCount" : 500, #300,                     # Number of points in the base grid of "assets above minimum"
+    "aXtraNestFac" : 3,                    # Exponential nesting factor when constructing "assets above minimum" grid
+    "aXtraExtra" : [None],                 # Additional values to add to aXtraGrid
+
+    # A few other parameters
+    "BoroCnstArt" : 0.0,                   # Artificial borrowing constraint; imposed minimum level of end-of period assets
+    "vFuncBool" : False,                   # Whether to calculate the value function during solution
+    "CubicBool" : False,                   # Preference shocks currently only compatible with linear cFunc
+    "T_cycle" : 1,                         # Number of periods in the cycle for this agent type 
+    
+    # Transition Matrix simulation parameters
+    "mCount": 600,
+    "mMax": 1000,
+    "mMin": 0.0001,
+    "mFac": 3,
+}
+
+def show_irfs(irfs_list, variables, labels=[" "], ylabel=r"Percentage points (dev. from ss)", T_plot=50, figsize=(18, 6)):
+    if len(irfs_list) != len(labels):
+        labels = [" "] * len(irfs_list)
+    n_var = len(variables)
+    fig, ax = plt.subplots(1, n_var, figsize=figsize, sharex=True)
+    for i in range(n_var):
+        # plot all irfs
+        for j, irf in enumerate(irfs_list):
+            ax[i].plot(100 * irf[variables[i]][:50], label=labels[j])
+        ax[i].set_title(variables[i])
+        ax[i].set_xlabel(r"$t$")
+        if i==0:
+            ax[i].set_ylabel(ylabel)
+        ax[i].legend()
+    plt.show()
